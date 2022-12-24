@@ -1,5 +1,6 @@
 import * as dotenv from "dotenv";
 dotenv.config();
+import * as server from 'http';
 import Discord, { EmbedBuilder } from "discord.js";
 const client = new Discord.Client({ intents: 32727 });
 //import {jobStart} from './cronjob.js';
@@ -52,4 +53,5 @@ client.on("ready", () => {
     })();
   });
 });
+server.createServer((req, res) => res.end('funciona')).listen();
 client.login(process.env.DISCORD);
