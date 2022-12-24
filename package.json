@@ -1,0 +1,19 @@
+{
+  "name": "sources",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {},
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@playwright/test": "^1.29.1"
+  },
+  "dependencies": {
+    "discord.js": "^14.7.1",
+    "dotenv": "^16.0.3",
+    "node-cron": "^3.0.0",
+    "playwright": "^1.29.1"
+  }
+}
