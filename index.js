@@ -1,6 +1,5 @@
 import * as dotenv from "dotenv";
 dotenv.config();
-import * as server from 'http';
 import Discord, { EmbedBuilder } from "discord.js";
 const client = new Discord.Client({ intents: 32727 });
 //import {jobStart} from './cronjob.js';
@@ -25,7 +24,7 @@ client.on("ready", () => {
         .locator("body > table > tbody > tr.filaPub4 > td:nth-child(3)")
         .textContent();
       console.log(content);
-      let testmsg = client.channels.cache.get("831227327449923584");
+      let testmsg = client.channels.cache.get(process.env.CHANNEL);
       let date_ob = new Date();
       let date = ("0" + date_ob.getDate()).slice(-2);
 
@@ -53,5 +52,4 @@ client.on("ready", () => {
     })();
   });
 });
-server.createServer((req, res) => res.end('funciona')).listen();
 client.login(process.env.DISCORD);
