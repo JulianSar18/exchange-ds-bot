@@ -10,7 +10,7 @@ import { chromium } from "playwright";
 client.on("ready", () => {
   console.log("Estoy listo!");
   //testmsg.send('test');
-  cron.schedule("0 8 * * *", function () {
+  cron.schedule("* * * * *", function () {
     console.log("running a task every minute");
     (async () => {
       const browser = await chromium.launch();
