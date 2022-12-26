@@ -1,3 +1,4 @@
+import express from 'express';
 import * as dotenv from "dotenv";
 dotenv.config();
 import Discord, { EmbedBuilder } from "discord.js";
@@ -6,10 +7,15 @@ const client = new Discord.Client({ intents: 32727 });
 import cron from "node-cron";
 import { chromium } from "playwright";
 
+const app = express()
+app.get('/', (req, res) => {
+  res.send('CronJob Corriendo')
+})
+const port = process.env.PORT || 4000
 client.on("ready", () => {
   console.log("Estoy listo!");
   //testmsg.send('test');
-  cron.schedule("40 12 * * *", function () {
+  cron.schedule("* * * * *", function () {
     console.log("running a task every minute");
     (async () => {
       const browser = await chromium.launch();
@@ -53,3 +59,7 @@ client.on("ready", () => {
   });
 });
 client.login(process.env.DISCORD);
+
+app.listen(port, () => {
+  console.log(`Example app listening on port ${port}`)
+})
