@@ -1,6 +1,5 @@
 import * as dotenv from "dotenv";
 dotenv.config();
-import * as server from 'http';
 import Discord, { EmbedBuilder } from "discord.js";
 const client = new Discord.Client({ intents: 32727 });
 //import {jobStart} from './cronjob.js';
@@ -10,7 +9,7 @@ import { chromium } from "playwright";
 client.on("ready", () => {
   console.log("Estoy listo!");
   //testmsg.send('test');
-  cron.schedule("30 15 * * *", function () {
+  cron.schedule("40 12 * * *", function () {
     console.log("running a task every minute");
     (async () => {
       const browser = await chromium.launch();
@@ -53,5 +52,4 @@ client.on("ready", () => {
     })();
   });
 });
-server.createServer((req, res) => res.end('funciona')).listen();
 client.login(process.env.DISCORD);
