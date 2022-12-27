@@ -18,7 +18,7 @@ app.get('/', (req, res) => {
 })
 const port = process.env.PORT || 4000
 client.on("ready", () => { 
-  cron.schedule('25 5 * * 1-6', function () {    
+  cron.schedule('30 8 * * 1-6', function () {    
     (async () => {
       const browser = await chromium.launch();
       const page = await browser.newPage();
@@ -57,7 +57,7 @@ client.on("ready", () => {
       await browser.close();
       usd = content
     })();
-  });
+  },{scheduled: true, timezone: "America/Bogota"});
 });
 client.on('messageCreate', async (message)=> { 
   if (!message.content.startsWith('$$') || message.author.bot) return;
