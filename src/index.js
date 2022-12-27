@@ -44,7 +44,7 @@ client.on("ready", () => {
 	.setColor(0x93C54B)
 	.setTitle('💵 💵 💵 💵 TRM 👀 👀 👀 👀')
 	.setAuthor({ name: 'TRM-BOT', iconURL: 'http://images3.memedroid.com/images/UPLOADED222/62ccc99499c9b.jpeg', url: 'https://discord.js.org' })
-	.setDescription('@everyone Tengo el gusto de informar la TRM para el dia de HOY')
+	.setDescription('@everyone Para mi es un placer informarles de las mejores fuentes lo siguiente:')
 	.setThumbnail('https://pbs.twimg.com/media/Fe3Zl22WAAESPtl?format=jpg&name=small')
 	.addFields(
 		{ name: 'TRM para el dia de HOY', value: `El TRM para **${year + "-" + month + "-" + date}** es de **${content}** COP` },
