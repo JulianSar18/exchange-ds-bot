@@ -11,13 +11,13 @@ const client = new Discord.Client({intents: [
 ], partials: ['MESSAGE', 'CHANNEL', 'REACTION'] });
 import cron from "node-cron";
 import { chromium } from "playwright";
-
+let usd;
 const app = express()
 app.get('/', (req, res) => {
   res.send('CronJob Corriendo')
 })
 const port = process.env.PORT || 4000
-client.on("ready", () => {
+client.on("ready", () => { 
   cron.schedule("0 5 * * *", function () {    
     (async () => {
       const browser = await chromium.launch();
@@ -55,6 +55,7 @@ client.on("ready", () => {
 	.setFooter({ text: "Con el auspicio de los cigarrillos que dan risa 🍁🍁🍁🍁🍁", iconURL: 'http://images3.memedroid.com/images/UPLOADED222/62ccc99499c9b.jpeg' });
       testmsg.send({embeds:[exampleEmbed]});
       await browser.close();
+      usd = content
     })();
   });
 });
@@ -62,23 +63,8 @@ client.on('messageCreate', async (message)=> {
   if (!message.content.startsWith('$$') || message.author.bot) return;
   const args = message.content.slice(2).trim().split(' ');
   const command = args.shift().toLowerCase();
-        if (command === `change`) {
-        async function contentUsd (){
-            const browser = await chromium.launch();
-            const page = await browser.newPage();
-            await page.goto(
-              "https://www.superfinanciera.gov.co/inicio/informes-y-cifras/cifras/establecimientos-de-credito/informacion-periodica/diaria/tasa-de-cambio-representativa-del-mercado-trm-60819"
-            );
-            const frame = await page.frameLocator(
-              "#form1 > div.pub > p:nth-child(1) > iframe"
-            );
-            const content = await frame
-              .locator("body > table > tbody > tr.filaPub4 > td:nth-child(3)")
-              .textContent();
-              await browser.close();
-              return content    
-            }           
-          const usdTRM = await contentUsd()
+        if (command === `change`) {                
+          const usdTRM = usd
           const resultContent = ((parseFloat(usdTRM.replace(/,/g, ''))) * args[0]).toLocaleString('en-EN');
           const exampleEmbed = new EmbedBuilder()
           .setColor(0x93C54B)
