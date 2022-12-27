@@ -1,9 +1,14 @@
 import express from 'express';
 import * as dotenv from "dotenv";
 dotenv.config();
-import Discord, { EmbedBuilder } from "discord.js";
-const client = new Discord.Client({ intents: 32727 });
-//import {jobStart} from './cronjob.js';
+import Discord, { EmbedBuilder, GatewayIntentBits} from "discord.js";
+const client = new Discord.Client({intents: [
+  GatewayIntentBits.DirectMessages,
+  GatewayIntentBits.Guilds,
+  GatewayIntentBits.GuildBans,
+  GatewayIntentBits.GuildMessages,
+  GatewayIntentBits.MessageContent,
+], partials: ['MESSAGE', 'CHANNEL', 'REACTION'] });
 import cron from "node-cron";
 import { chromium } from "playwright";
 
@@ -13,10 +18,7 @@ app.get('/', (req, res) => {
 })
 const port = process.env.PORT || 4000
 client.on("ready", () => {
-  console.log("Estoy listo!");
-  //testmsg.send('test');
-  cron.schedule("* * * * *", function () {
-    console.log("running a task every minute");
+  cron.schedule("0 5 * * *", function () {    
     (async () => {
       const browser = await chromium.launch();
       const page = await browser.newPage();
@@ -29,7 +31,6 @@ client.on("ready", () => {
       const content = await frame
         .locator("body > table > tbody > tr.filaPub4 > td:nth-child(3)")
         .textContent();
-      console.log(content);
       let testmsg = client.channels.cache.get(process.env.CHANNEL);
       let date_ob = new Date();
       let date = ("0" + date_ob.getDate()).slice(-2);
@@ -42,7 +43,6 @@ client.on("ready", () => {
       const exampleEmbed = new EmbedBuilder()
 	.setColor(0x93C54B)
 	.setTitle('💵 💵 💵 💵 TRM 👀 👀 👀 👀')
-	.setURL('https://discord.js.org/')
 	.setAuthor({ name: 'TRM-BOT', iconURL: 'http://images3.memedroid.com/images/UPLOADED222/62ccc99499c9b.jpeg', url: 'https://discord.js.org' })
 	.setDescription('@everyone Tengo el gusto de informar la TRM para el dia de HOY')
 	.setThumbnail('https://pbs.twimg.com/media/Fe3Zl22WAAESPtl?format=jpg&name=small')
@@ -58,7 +58,39 @@ client.on("ready", () => {
     })();
   });
 });
+client.on('messageCreate', async (message)=> { 
+  if (!message.content.startsWith('$$') || message.author.bot) return;
+  const args = message.content.slice(2).trim().split(' ');
+  const command = args.shift().toLowerCase();
+        if (command === `change`) {
+        async function contentUsd (){
+            const browser = await chromium.launch();
+            const page = await browser.newPage();
+            await page.goto(
+              "https://www.superfinanciera.gov.co/inicio/informes-y-cifras/cifras/establecimientos-de-credito/informacion-periodica/diaria/tasa-de-cambio-representativa-del-mercado-trm-60819"
+            );
+            const frame = await page.frameLocator(
+              "#form1 > div.pub > p:nth-child(1) > iframe"
+            );
+            const content = await frame
+              .locator("body > table > tbody > tr.filaPub4 > td:nth-child(3)")
+              .textContent();
+              await browser.close();
+              return content    
+            }           
+          const usdTRM = await contentUsd()
+          const resultContent = ((parseFloat(usdTRM.replace(/,/g, ''))) * args[0]).toLocaleString('en-EN');
+          const exampleEmbed = new EmbedBuilder()
+          .setColor(0x93C54B)
+          .setTitle(`Conversión Realizada`)
+          .setAuthor({ name: 'TRM-BOT', iconURL: 'http://images3.memedroid.com/images/UPLOADED222/62ccc99499c9b.jpeg'})
+          .setDescription(`Segun mis calculos **${args[0]}** USD son **${resultContent}** COP`)
+          .setImage('https://media.giphy.com/media/67ThRZlYBvibtdF9JH/giphy-downsized.gif')
+          message.channel.send({content:`<@${message.author.id}>`, embeds:[exampleEmbed]});
+        }
+})
 client.login(process.env.DISCORD);
+
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)
