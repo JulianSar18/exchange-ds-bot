@@ -18,7 +18,7 @@ app.get('/', (req, res) => {
 })
 const port = process.env.PORT || 4000
 client.on("ready", () => { 
-  cron.schedule("0 5 * * *", function () {    
+  cron.schedule('25 5 * * 1-6', function () {    
     (async () => {
       const browser = await chromium.launch();
       const page = await browser.newPage();
