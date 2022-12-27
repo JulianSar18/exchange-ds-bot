@@ -11,7 +11,7 @@ const client = new Discord.Client({intents: [
 ], partials: ['MESSAGE', 'CHANNEL', 'REACTION'] });
 import cron from "node-cron";
 import { chromium } from "playwright";
-let usd;
+let usd = 0;
 const app = express()
 app.get('/', (req, res) => {
   res.send('CronJob Corriendo')
