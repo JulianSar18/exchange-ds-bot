@@ -59,11 +59,6 @@ client.on("messageCreate", async (message) => {
     }
   }
 });
-client.login(process.env.DISCORD);
-
-app.listen(port, () => {
-  console.log(`Example app listening on port ${port}`);
-});
 
 async function scrapping () {
   const browser = await chromium.launch();
@@ -124,3 +119,9 @@ async function scrapping () {
   await browser.close();
   return usd;
 };
+client.login(process.env.DISCORD);
+
+app.listen(port, () => {
+  console.log(`Example app listening on port ${port}`);
+});
+
