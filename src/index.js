@@ -15,15 +15,11 @@ const client = new Discord.Client({
 import cron from "node-cron";
 import { chromium } from "playwright";
 let usd = "0";
-const app = express();
-app.get("/", (req, res) => {
-  res.send("CronJob Corriendo");
-});
-const port = process.env.PORT || 4000;
 client.on("ready", () => {
+  console.log("conecato")
   cron.schedule(
-    "30 8 * * 1-6", scrapping,
-    { scheduled: true, timezone: "America/Bogota" }
+    "45 10 * * 1-6", scrapping,
+    { scheduled: true, timezone: "America/Bogota"}
   );
 });
 client.on("messageCreate", async (message) => {
@@ -121,7 +117,4 @@ async function scrapping () {
 };
 client.login(process.env.DISCORD);
 
-app.listen(port, () => {
-  console.log(`Example app listening on port ${port}`);
-});
 
