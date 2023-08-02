@@ -63,7 +63,7 @@ async function scrapping () {
     "https://www.superfinanciera.gov.co/inicio/informes-y-cifras/cifras/establecimientos-de-credito/informacion-periodica/diaria/tasa-de-cambio-representativa-del-mercado-trm-60819"
   );
   const frame = await page.frameLocator(
-    "#form1 > div.pub > p:nth-child(1) > iframe"
+    "#form1 > div.pub  > iframe"
   );
   const content = await frame
     .locator("body > table > tbody > tr.filaPub4 > td:nth-child(3)")
