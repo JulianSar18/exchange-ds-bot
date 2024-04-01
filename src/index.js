@@ -19,7 +19,7 @@ export function start(){
   client.on("ready", () => {
     console.log("conectado")
     cron.schedule(
-      "45 15 * * 1-6", scrapping,
+      "20 18 * * 1-6", scrapping,
       { scheduled: true, timezone: "America/Bogota"}
     );
   });
