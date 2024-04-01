@@ -18,12 +18,12 @@ let usd = "0";
 export function start(){
   client.on("ready", () => {
     console.log("conectado")
-  });
-  client.on("messageCreate", async (message) => {
     cron.schedule(
-      "35 15 * * 1-6", scrapping,
+      "45 15 * * 1-6", scrapping,
       { scheduled: true, timezone: "America/Bogota"}
     );
+  });
+  client.on("messageCreate", async (message) => {
     if (!message.content.startsWith("$$") || message.author.bot) return;
     const args = message.content.slice(2).trim().split(" ");
     const command = args.shift().toLowerCase();
