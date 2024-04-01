@@ -1,4 +1,3 @@
-import express from "express";
 import * as dotenv from "dotenv";
 dotenv.config();
 import Discord, { EmbedBuilder, GatewayIntentBits } from "discord.js";
@@ -15,46 +14,51 @@ const client = new Discord.Client({
 import cron from "node-cron";
 import { chromium } from "playwright";
 let usd = "0";
-client.on("ready", () => {
-  console.log("conectado")
-});
-client.on("messageCreate", async (message) => {
-  cron.schedule(
-    "45 10 * * 1-6", scrapping,
-    { scheduled: true, timezone: "America/Bogota"}
-  );
-  if (!message.content.startsWith("$$") || message.author.bot) return;
-  const args = message.content.slice(2).trim().split(" ");
-  const command = args.shift().toLowerCase();
-  if (command === `change`) {
-    try {      
-      const usdTRM = usd==0?await scrapping(): usd;
-      const resultContent = (
-        parseFloat(usdTRM.replace(/,/g, "")) * parseFloat(args[0].replace(/,/g, ""))
-      ).toLocaleString("en-EN");      
-      const exampleEmbed = new EmbedBuilder()
-        .setColor(0x93c54b)
-        .setTitle(`Conversión Realizada`)
-        .setAuthor({
-          name: "TRM-BOT",
-          iconURL:
-            "http://images3.memedroid.com/images/UPLOADED222/62ccc99499c9b.jpeg",
-        })
-        .setDescription(
-          `Segun mis calculos **${args[0]}** USD son **${resultContent}** COP`
-        )
-        .setImage(
-          "https://media.giphy.com/media/67ThRZlYBvibtdF9JH/giphy-downsized.gif"
-        );
-      message.channel.send({
-        content: `<@${message.author.id}>`,
-        embeds: [exampleEmbed],
-      });
-    } catch (error) {
-      console.log(error)
+
+export function start(){
+  client.on("ready", () => {
+    console.log("conectado")
+  });
+  client.on("messageCreate", async (message) => {
+    cron.schedule(
+      "45 10 * * 1-6", scrapping,
+      { scheduled: true, timezone: "America/Bogota"}
+    );
+    if (!message.content.startsWith("$$") || message.author.bot) return;
+    const args = message.content.slice(2).trim().split(" ");
+    const command = args.shift().toLowerCase();
+    if (command === `change`) {
+      try {      
+        const usdTRM = usd==0?await scrapping(): usd;
+        const resultContent = (
+          parseFloat(usdTRM.replace(/,/g, "")) * parseFloat(args[0].replace(/,/g, ""))
+        ).toLocaleString("en-EN");      
+        const exampleEmbed = new EmbedBuilder()
+          .setColor(0x93c54b)
+          .setTitle(`Conversión Realizada`)
+          .setAuthor({
+            name: "TRM-BOT",
+            iconURL:
+              "http://images3.memedroid.com/images/UPLOADED222/62ccc99499c9b.jpeg",
+          })
+          .setDescription(
+            `Segun mis calculos **${args[0]}** USD son **${resultContent}** COP`
+          )
+          .setImage(
+            "https://media.giphy.com/media/67ThRZlYBvibtdF9JH/giphy-downsized.gif"
+          );
+        message.channel.send({
+          content: `<@${message.author.id}>`,
+          embeds: [exampleEmbed],
+        });
+      } catch (error) {
+        console.log(error)
+      }
     }
-  }
-});
+  });
+}
+
+
 
 async function scrapping () {
   const browser = await chromium.launch();
@@ -114,5 +118,4 @@ async function scrapping () {
   return usd;
 };
 client.login(process.env.DISCORD);
-
 
