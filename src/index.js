@@ -21,7 +21,7 @@ export function start(){
   });
   client.on("messageCreate", async (message) => {
     cron.schedule(
-      "45 10 * * 1-6", scrapping,
+      "35 15 * * 1-6", scrapping,
       { scheduled: true, timezone: "America/Bogota"}
     );
     if (!message.content.startsWith("$$") || message.author.bot) return;
