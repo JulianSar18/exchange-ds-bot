@@ -16,13 +16,13 @@ import cron from "node-cron";
 import { chromium } from "playwright";
 let usd = "0";
 client.on("ready", () => {
-  console.log("conecato")
+  console.log("conectado")
+});
+client.on("messageCreate", async (message) => {
   cron.schedule(
     "45 10 * * 1-6", scrapping,
     { scheduled: true, timezone: "America/Bogota"}
   );
-});
-client.on("messageCreate", async (message) => {
   if (!message.content.startsWith("$$") || message.author.bot) return;
   const args = message.content.slice(2).trim().split(" ");
   const command = args.shift().toLowerCase();
@@ -60,12 +60,10 @@ async function scrapping () {
   const browser = await chromium.launch();
   const page = await browser.newPage();
   await page.goto(
-    "https://www.superfinanciera.gov.co/inicio/informes-y-cifras/cifras/establecimientos-de-credito/informacion-periodica/diaria/tasa-de-cambio-representativa-del-mercado-trm-60819"
+    "https://www.superfinanciera.gov.co/CargaDriver/index.jsp"
   );
-  const frame = await page.frameLocator(
-    "#form1 > div.pub  > iframe"
-  );
-  const content = await frame
+
+  const content = await page
     .locator("body > table > tbody > tr.filaPub4 > td:nth-child(3)")
     .textContent();
   let testmsg = client.channels.cache.get(process.env.CHANNEL);
